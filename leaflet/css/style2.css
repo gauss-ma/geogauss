@@ -32,8 +32,8 @@ main{
 		text-align:center;
   		overflow: scroll;
   		overflow-x: hidden;
- 	max-width:500px;
 	width:100%;
+ 	max-width:500px;
 	border-radius:5px;
 	margin:0;
 	padding:10px;
@@ -251,9 +251,16 @@ margin-bottom:25px;
 /* Responsive layout - makes a one column layout instead of a two-column layout */
 @media (max-width: 800px) {
   main {
-    flex-direction: column;
+    	flex-direction: column;
   }
-  #plot-container, .container-bar{margin:0px;}
+  #sidebar{
+      overflow: hide;
+      padding:1px;
+}
+  #plot-container, .container-bar{
+}
+
+
 }
 
 
@@ -280,3 +287,9 @@ margin-bottom:25px;
 .number-icon.poorIcon {background-image: url("../markers/round/round-poor.svg");}
 .number-icon.vpoorIcon {background-image: url("../markers/round/round-vpoor.svg");}
 .number-icon.severeIcon {background-image: url("../markers/round/round-severe.svg");}
+
+
+/* que no se vea el toolbar de plotly*/
+.modebar{
+      display: none !important;
+}

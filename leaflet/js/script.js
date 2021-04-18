@@ -51,7 +51,7 @@ L.NewLineControl = L.EditControl.extend({
     position: 'topleft',
     //callback: mymap.editTools.startPolyline,
     kind: 'line',
-    html: 'asd'
+    html: 'asa',
   }
 });
 
@@ -120,7 +120,7 @@ function hacerIconNumber(n,clase){
 		iconSize: [40, 40],
 		iconAnchor: [10, 44],
 		popupAnchor: [3, -40],
-		html: "<span>"+n+"</span>"
+		html: "<span>"+Math.round(n)+"</span>"
 	});
 };
 
@@ -164,6 +164,10 @@ mymap.getPane('pane_Puntos').style['mix-blend-mode'] = 'normal';
 				addProgressBar(feature.properties['AQI'],feature.properties['NO2'],feature.properties['PM10'],feature.properties['PM25'],feature.properties['SO2'],feature.properties['CO']);
 				
 				$("#sidebar").show();
+
+				$("body,html").animate({scrollTop: $('#sidebar').offset().top},100);
+
+
 
 				 },
 		                 //si saco mouse sobre objeto:
@@ -338,7 +342,7 @@ function addProgressBar(AQI,NO2,PM10,PM25,SO2,CO){
 
 
 	var NO2bar = new ProgressBar.Line('#NO2-bar', {
-		color:"#55a84f",strokeWidth:2,trailColor: '#eee',trailWidth: 2,
+		color:"#17BECF",strokeWidth:2,trailColor: '#eee',trailWidth: 2,
 		text:{style: barTextStyle},
   		step: (state, bar) => { bar.setText(NO2+'ug/m<sup>3</sup>');}
 	});
