@@ -1,8 +1,8 @@
 <html>
 <head>
 	<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
+        <!--meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width"-->
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
 	<title>prueba-leaflet-gauss </title>
 	<!-- CSS -->
@@ -12,9 +12,14 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/trancisiones.css">
 	<link rel="stylesheet" href="css/style2.css">
+	<link rel="stylesheet" href="css/fontawesome-all.min.css">
 	<!-- JS -->
 	<script src="js/jquery-3.6.0.min.js"></script>
-               <script src="https://cdn.plot.ly/plotly-latest.js"></script>	
+        <script src="https://cdn.plot.ly/plotly-latest.js"></script>	
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  	<script id="MathJax-script" async
+  	        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  	</script>
 	       <!--script src="js/plotly.min.js"></script-->
 	<script src="js/leaflet/leaflet.js"></script>
 	<script src="js/leaflet/leaflet.Editable.js"></script>
@@ -47,29 +52,41 @@ Cascada de intentos para GOOGLE FONTS
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Roboto:wght@400&display=swap" />
 </noscript>
-
-
-
-
-
-
-
-
-
-
-
 </head>
 <body>
-<header id="logo"><img src="img/logo-gauss.png"/> &nbsp; <h1> gauss</h1> </header>
+<!-- header id="logo"><img src="img/logo-gauss.png"/> &nbsp; <h1> gauss</h1> </header -->
 <main>
-<div id="mapid">
-	<!-- MAPA -->
-</div>
+<div id="mapid"><!-- MAPA --></div>
 <div id="sidebar">
-	<div class="boton-slide" onClick="" style="width:40px;height:40px;background-color:'red';position:absolute;top:0;left:0;">abrir/cerrar</div>
-<!-- div class="container-data">
-</div -->
+<div class="boton-slide" onClick="" style="width:40px;height:40px;background-color:'red';position:absolute;top:0;left:0;">abrir/cerrar</div>
+<!-- div class="container-data"></div -->
 </div>
+
+
+<div id="proyect-info">
+	<div class="close-mark" onClick='$("#proyect-info").hide()'>&#10006;</div>
+	<h3>Información del Proyecto </h3>
+	<h4> Obtención de datos</h4>
+	<p>Texto contando como fueron/son las campañas de monitoreo. Información sobre equipos y procesamiento de datos.</p>
+	<br>
+	
+	<h4> Calculo de AQI</h4>
+	<p> Se puede contar como es el calculo del AQI, se pueden usar ecuaciónes como:
+	
+	\begin{equation}
+	\text{AQI}=\dfrac{(C_{obs}-C_{low})}{(C_{high}-C_{low})} (I_{high} - I_{low}) + I_{low} 
+	\end{equation}
+
+	</p>
+	<br>
+	
+	<h4>Contacto</h4>
+	<p> Por cualquier duda ó sugerencia podes contactarnos en <a href="">ricardo@proyecto.com.ar</a> </p>
+	<br>
+
+
+</div>
+
 </main>
 <footer>
 </footer>

@@ -1,8 +1,9 @@
 //Inicializacion:
 //
 $("#sidebar").hide()
+$("#proyect-info").hide()
 
-// SCRIPT LEAFLET:
+// LEAFLET:
 //var mymap = L.map('mapid').setView([51.505, -0.09], 13);
  
 //CREACION DE MAPA:
@@ -19,8 +20,6 @@ var div = L.DomUtil.create("div", "info legend");
 }
 north.addTo(mymap);
 
-
-
 //LEAFLET CONTROL BUTTONS:
 L.EditControl = L.Control.extend({
   options: {
@@ -29,12 +28,11 @@ L.EditControl = L.Control.extend({
     kind: '',
     html: ''
   },
-	
   onAdd: function(mymap) {
   var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
     link = L.DomUtil.create('a', '', container);
   link.href = '#';
-  link.title = 'Create a new ' + this.options.kind;
+  link.title = this.options.kind;
   link.innerHTML = this.options.html;
   L.DomEvent.on(link, 'click', L.DomEvent.stop)
     .on(link, 'click', function() {
@@ -46,26 +44,35 @@ L.EditControl = L.Control.extend({
 	
 });
 	
-L.NewLineControl = L.EditControl.extend({
+L.InfoControl = L.EditControl.extend({
   options: {
     position: 'topleft',
+    callback: function mostrarInfo(){$("#proyect-info").show()},
     //callback: mymap.editTools.startPolyline,
-    kind: 'line',
-    html: 'asa',
+    kind: 'Info',
+    html:'?'
+    //html: '<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"></path></svg>',
   }
 });
-
-L.NewMarkerControl = L.EditControl.extend({
+L.LocationControl = L.EditControl.extend({
   options: {
     position: 'topleft',
     //callback: mymap.editTools.startMarker, //funcion a llamar cuando click
-    kind: 'marker',
-    html: '🖈', 
+    kind: 'Ubicación',
+    html:'🖈', //'<span class="fa fa-map-marker"></span>',
   }
-
 });
-mymap.addControl(new L.NewMarkerControl());
-mymap.addControl(new L.NewLineControl());
+L.LayersControl = L.EditControl.extend({
+  options: {
+    position: 'topleft',
+    //callback: mymap.editTools.startMarker, //funcion a llamar cuando click
+    kind: 'Layers',
+    html: '<img src="img/icons/layers.png"/>', 
+  }
+});
+mymap.addControl(new L.LocationControl());
+mymap.addControl(new L.LayersControl());
+mymap.addControl(new L.InfoControl());
 
 
 //CREACION DE PANE PARA BG-LAYER:
@@ -80,49 +87,48 @@ var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={
     minNativeZoom: 0,
     maxNativeZoom: 19
 });
-
 //LAYER: GoogleMaps_0;
 mymap.addLayer(layer_GoogleMaps_0);
 mymap.attributionControl.setPrefix('Desarrollado por <a href="https://gauss-ma.com.ar/" target="_blank">GAUSS</a>. ');
 
 //CREACION DE ICONO:
-var estacionIcon = L.icon({
-    iconUrl: 'markers/estacionIcon.svg',
-    iconSize: [34, 34],//iconSize:     [38, 95], // size of the icon
-    iconAnchor: [17,34], // point of the icon which will correspond to marker's location
-    //shadowUrl: 'leaf-shadow.png',
-    //shadowSize:   [50, 64], // size of the shadow
-    //shadowAnchor: [4, 62],  // the same for the shadow
-    popupAnchor:  [0, -40] // point from which the popup should open relative to the iconAnchor
-});
-let weatherIcon = L.Icon.extend({
-    options: {
-      iconSize:     [34, 34], // size of the icon
-      iconAnchor:   [17, 17],   // point of the icon which will correspond to marker's location
-      popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
-    }
-});
-let hurricaneIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxAud5K8hAAAAVFJREFUOMulk7FqwlAUhn9LHbIZwSmIxClbwMnNsWQqTnmDvEOewM3Nl4gU2i2lUPAFhEwREUXUJUIchRT6d7ia9GpiIz3ww73n3vvBPec/FZIojP0+xnSqYjIBlktgvRZ5VQWaTcA0gecnPBYCxmNiOMRXEKB6PIqcYQD9PtDrCZCuHwAAJGVtF6TjMFEUEshk2+R2wav74vRXIopi2rb8+KTvep20LNL3eRviurkASZpGeh5zIck8FBf+ggCkYTCZhyno4VzH6ssrsNuhVMxmqH58ptsUgtUKd0UQ5ED+ERnENO97qevZWiqsYZQrrKZJhZVb7HnlOuS6LPYJCfo+aVnCXHkA2yajKL4NOX/twrmJopCOk2v9dF6SeSgsPRhItUkUhex2ydEod25IosLtgnh7F33fbIRfajWg1QLabTGxnc4BjUa9sFNX5Iv/ltEPO/n21h3V82sAAAAASUVORK5CYII='});
-let stormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxAgkCqRgwAAAXBJREFUOMudVD2LwkAUnAgWqUTBSizS2UW8K9JZhmBxZSrbFP6D/SH5E/ZCwsFJrAx4oJUgcnBoFTi0jnBzxWI+zMbiHgws+95OXubNrkYSTyMMiSgCtlvgcgGuV8AwgH4fME3gzQZIqjGfk5bFVNdJQMKySCHIICDjmDwfSZl5OJwkG3pefvAO12V62FP1wSqB61YJAP52OqTjyC6ekghRbl+FXo+cz6kmiWNZUCz2PNL3pQ7F3GCQ6VEm8f0ygWw7jyAoE/l+RtLIRrnb5WOdTADbLo/atuX+PVarbNnAf6PVUpAYRl6wWABh+Gg6uX8P08zXmSbnoxSsqIsQ8t89r5Ireqbq0qJ4dRCC9T4hwSAgHafeL65LJsnmOQmJ9LDno3NTXVcSkITGJNkAwO3689L8+gaiCFgugfUaAHDTdTRNE5hOgdlMUw1KSw97Nt8/pE9OJ3ndAaDdBoZDYDwGRqNPdLuvteNW3uK656EGf4eBNQ/xN4JwAAAAAElFTkSuQmCC'});
-let depressionIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxIgohzzAQAAARlJREFUOMutlLFqwzAQhk8FF1xwqdNRW7poy+pX8ByC3kDvkFdyyJ5X8JgtUMgDSEQJ9WZD/w7CkR07AuMeHEb+pc/H3S8zADQ3XoKqMbb5PoGMsaFtbLSS3Q603xMdj/7dakW0XhNtNmywH4BPrS2UQh3HANEg6zgGlAK0tt1zfUgXIAQgJbDduifnHqgUxiFF4QFZBpQlelGWQJ77ig4HDCFSuiXnQ0AX1FYk5QNEawshuuLzaD8mxL03bsT1T0pV5Tq9XIZN0epVRc3tknqfvL5fKUmceD6HIa2eJBR9fF77I57dk8fp5Pn4dLIMIMLvYgEUBZ765O4Fzp0fJvlkhmP/5e6w4K/AGNvcLmn0FhHxLzbtFk+MP6p09GzHwZBXAAAAAElFTkSuQmCC'});
-let prestormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxU3bo7gAQAAALNJREFUOMvNU8sOwyAMc6epE9de+938BHwJfE9pSzXNO6BuoPKY1h0WKZfEcQyGjiTOxgU/iDeJtYTWhJuLYL9tgNaEtal8kiGVIseRlJKvWpSr96CUAaNUgjmAHsNASsnV+5So0jtsjME58pxK5IrJUE1djSTevglRVLBn1uJb3wMA7suCqxBtj2sqvj/ObmM89OnF1ixu2Z99bCXZzcdGY0JzckUXOLmwzJiEpPvDX3winqe9C5rOnaU+AAAAAElFTkSuQmCC'});
-let poststormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxYc6R9KggAAAWdJREFUOMutUz1PwlAUPSUppBBCYGDpBFM3/oD+BgaGzixv073RUcOu6cJPaMKo4W+wmZiUuR0KBGpoGY7Ds69URFS8yc3Lux/n3XfPvRpJnCulY44kTYEwjHavL0QYRkmaHgXRDiqJ34DnJ2IyAWaz3N7rAcMhcHGpoVYt5pDMNQgiCsHUMEjgQFPDIIUggyDaz8sBNjEKAKZJ2jbpOPI0zRxQCHITfwHieQogNQzSdVkQ1y36PY8FkG2SgLZdrMCyskByOpX3j4pSwyBtm9sk2askCCJalrzaNrmJydFIJgohT8eR9uwxy1K9KQHAbhU1Vae7XaBWBa6uJSPjMdDpADe30t7tqtAsrwQAeqO1UB7flzQ/PkiKhQDmc+D+Ttp9X4XqVT2n+Lc9Ud/+d3aUCpHPwuc5yRr/7ZycMbGnd2e9Bup1ydRggKTf1yrl8okF3NviynIZ7VZRU2+0Fmi3Wz/f4j/IO6YU957m4lBDAAAAAElFTkSuQmCC'})
-let goodIcon = new weatherIcon({iconUrl: 'markers/Icon-good.svg'})
-let satiIcon = new weatherIcon({iconUrl: 'markers/Icon-satisfactory.svg'})
-let modeIcon = new weatherIcon({iconUrl: 'markers/Icon-moderate.svg'})
-let poorIcon = new weatherIcon({iconUrl: 'markers/Icon-poor.svg'})
-let vpoorIcon = new weatherIcon({iconUrl: 'markers/Icon-vpoor.svg'})
-let severIcon = new weatherIcon({iconUrl: 'markers/Icon-severe.svg'})
-
 function hacerIconNumber(n,clase){
 	return L.divIcon({  
 		className: "number-icon "+clase, 
-		iconSize: [40, 40],
-		iconAnchor: [10, 44],
-		popupAnchor: [3, -40],
+		iconSize: [34, 34],
+		iconAnchor: [17, 34],
+		popupAnchor: [0, -40],
 		html: "<span>"+Math.round(n)+"</span>"
 	});
 };
+//var estacionIcon = L.icon({
+//    iconUrl: 'markers/estacionIcon.svg',
+//    iconSize: [34, 34],//iconSize:     [38, 95], // size of the icon
+//    iconAnchor: [17,34], // point of the icon which will correspond to marker's location
+//    //shadowUrl: 'leaf-shadow.png',
+//    //shadowSize:   [50, 64], // size of the shadow
+//    //shadowAnchor: [4, 62],  // the same for the shadow
+//    popupAnchor:  [0, -40] // point from which the popup should open relative to the iconAnchor
+//});
+//let weatherIcon = L.Icon.extend({
+//    options: {
+//      iconSize:     [34, 34], // size of the icon
+//      iconAnchor:   [17, 17],   // point of the icon which will correspond to marker's location
+//      popupAnchor:  [0, -40] // point from which the popup should open relative to the iconAnchor
+//    }
+//});
+//let hurricaneIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxAud5K8hAAAAVFJREFUOMulk7FqwlAUhn9LHbIZwSmIxClbwMnNsWQqTnmDvEOewM3Nl4gU2i2lUPAFhEwREUXUJUIchRT6d7ia9GpiIz3ww73n3vvBPec/FZIojP0+xnSqYjIBlktgvRZ5VQWaTcA0gecnPBYCxmNiOMRXEKB6PIqcYQD9PtDrCZCuHwAAJGVtF6TjMFEUEshk2+R2wav74vRXIopi2rb8+KTvep20LNL3eRviurkASZpGeh5zIck8FBf+ggCkYTCZhyno4VzH6ssrsNuhVMxmqH58ptsUgtUKd0UQ5ED+ERnENO97qevZWiqsYZQrrKZJhZVb7HnlOuS6LPYJCfo+aVnCXHkA2yajKL4NOX/twrmJopCOk2v9dF6SeSgsPRhItUkUhex2ydEod25IosLtgnh7F33fbIRfajWg1QLabTGxnc4BjUa9sFNX5Iv/ltEPO/n21h3V82sAAAAASUVORK5CYII='});
+//let stormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxAgkCqRgwAAAXBJREFUOMudVD2LwkAUnAgWqUTBSizS2UW8K9JZhmBxZSrbFP6D/SH5E/ZCwsFJrAx4oJUgcnBoFTi0jnBzxWI+zMbiHgws+95OXubNrkYSTyMMiSgCtlvgcgGuV8AwgH4fME3gzQZIqjGfk5bFVNdJQMKySCHIICDjmDwfSZl5OJwkG3pefvAO12V62FP1wSqB61YJAP52OqTjyC6ekghRbl+FXo+cz6kmiWNZUCz2PNL3pQ7F3GCQ6VEm8f0ygWw7jyAoE/l+RtLIRrnb5WOdTADbLo/atuX+PVarbNnAf6PVUpAYRl6wWABh+Gg6uX8P08zXmSbnoxSsqIsQ8t89r5Ireqbq0qJ4dRCC9T4hwSAgHafeL65LJsnmOQmJ9LDno3NTXVcSkITGJNkAwO3689L8+gaiCFgugfUaAHDTdTRNE5hOgdlMUw1KSw97Nt8/pE9OJ3ndAaDdBoZDYDwGRqNPdLuvteNW3uK656EGf4eBNQ/xN4JwAAAAAElFTkSuQmCC'});
+//let depressionIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxIgohzzAQAAARlJREFUOMutlLFqwzAQhk8FF1xwqdNRW7poy+pX8ByC3kDvkFdyyJ5X8JgtUMgDSEQJ9WZD/w7CkR07AuMeHEb+pc/H3S8zADQ3XoKqMbb5PoGMsaFtbLSS3Q603xMdj/7dakW0XhNtNmywH4BPrS2UQh3HANEg6zgGlAK0tt1zfUgXIAQgJbDduifnHqgUxiFF4QFZBpQlelGWQJ77ig4HDCFSuiXnQ0AX1FYk5QNEawshuuLzaD8mxL03bsT1T0pV5Tq9XIZN0epVRc3tknqfvL5fKUmceD6HIa2eJBR9fF77I57dk8fp5Pn4dLIMIMLvYgEUBZ765O4Fzp0fJvlkhmP/5e6w4K/AGNvcLmn0FhHxLzbtFk+MP6p09GzHwZBXAAAAAElFTkSuQmCC'});
+//let prestormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxU3bo7gAQAAALNJREFUOMvNU8sOwyAMc6epE9de+938BHwJfE9pSzXNO6BuoPKY1h0WKZfEcQyGjiTOxgU/iDeJtYTWhJuLYL9tgNaEtal8kiGVIseRlJKvWpSr96CUAaNUgjmAHsNASsnV+5So0jtsjME58pxK5IrJUE1djSTevglRVLBn1uJb3wMA7suCqxBtj2sqvj/ObmM89OnF1ixu2Z99bCXZzcdGY0JzckUXOLmwzJiEpPvDX3winqe9C5rOnaU+AAAAAElFTkSuQmCC'});
+//let poststormIcon = new weatherIcon({iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QoBAxYc6R9KggAAAWdJREFUOMutUz1PwlAUPSUppBBCYGDpBFM3/oD+BgaGzixv073RUcOu6cJPaMKo4W+wmZiUuR0KBGpoGY7Ds69URFS8yc3Lux/n3XfPvRpJnCulY44kTYEwjHavL0QYRkmaHgXRDiqJ34DnJ2IyAWaz3N7rAcMhcHGpoVYt5pDMNQgiCsHUMEjgQFPDIIUggyDaz8sBNjEKAKZJ2jbpOPI0zRxQCHITfwHieQogNQzSdVkQ1y36PY8FkG2SgLZdrMCyskByOpX3j4pSwyBtm9sk2askCCJalrzaNrmJydFIJgohT8eR9uwxy1K9KQHAbhU1Vae7XaBWBa6uJSPjMdDpADe30t7tqtAsrwQAeqO1UB7flzQ/PkiKhQDmc+D+Ttp9X4XqVT2n+Lc9Ud/+d3aUCpHPwuc5yRr/7ZycMbGnd2e9Bup1ydRggKTf1yrl8okF3NviynIZ7VZRU2+0Fmi3Wz/f4j/IO6YU957m4lBDAAAAAElFTkSuQmCC'})
+//let goodIcon = new weatherIcon({iconUrl: 'markers/Icon-good.svg'})
+//let satiIcon = new weatherIcon({iconUrl: 'markers/Icon-satisfactory.svg'})
+//let modeIcon = new weatherIcon({iconUrl: 'markers/Icon-moderate.svg'})
+//let poorIcon = new weatherIcon({iconUrl: 'markers/Icon-poor.svg'})
+//let vpoorIcon = new weatherIcon({iconUrl: 'markers/Icon-vpoor.svg'})
+//let severIcon = new weatherIcon({iconUrl: 'markers/Icon-severe.svg'})
+//
 
 //CREACION DE MARCADORES:
 //var marker = L.marker([-34.80, -57.78]).addTo(mymap);
@@ -144,61 +150,60 @@ mymap.createPane('pane_Puntos');
 mymap.getPane('pane_Puntos').style.zIndex = 401;
 mymap.getPane('pane_Puntos').style['mix-blend-mode'] = 'normal';
 
-	//Creo layer de puntos desde geoJSON
+//Creo layer de puntos desde geoJSON
+//FUNCION A APLICAR A CADA PUNTO DEL GEOJSON:
+function pop_Puntos(feature, layer) {
+	layer.on({
+	           click: function(e){
+	               console.log("CLICK en "+feature.properties['ID']+"!");
+	               $("#sidebar").empty();
+	               mymap.setView(e.target.getLatLng(),13);
+
+	           var info= makeAQIdiv(feature.properties['AQI']);
+	           info+=makeMeteoIcons(feature.properties['TEMP'],feature.properties['RHUM'],feature.properties['WSPD'],feature.properties['WDIR'],);
+	           info+=makePollutsIndicatorBars();
+	           info+='</div> <div id="plot-container"></div>';
 	
-		//FUNCION A APLICAR A CADA PUNTOS DEL GEOJSON:
-		function pop_Puntos(feature, layer) {
-		            layer.on({
-				click: function(e){
-				    console.log("CLICK en "+feature.properties['ID']+"!");
-				    $("#sidebar").empty();
-				    mymap.setView(e.target.getLatLng(),13);
+	           $("#sidebar").append(info);
+	           plotTimeSerie();
+	           addProgressBar(feature.properties['AQI'],feature.properties['NO2'],feature.properties['PM10'],feature.properties['PM25'],feature.properties['SO2'],feature.properties['CO']);
+	           
+	           $("#sidebar").show();
 
-				var info= makeAQIdiv(feature.properties['AQI']);
-				info+=makeMeteoIcons(feature.properties['TEMP'],feature.properties['RHUM'],feature.properties['WSPD'],feature.properties['WDIR'],);
-				info+=makePollutsIndicatorBars();
-				info+='</div> <div id="plot-container"></div>';
+	           $("body,html").animate({scrollTop: $('#sidebar').offset().top},100);
+
+
+
+	            },
+	            //si saco mouse sobre objeto:
+	            mouseout: function(e) {
+	           //     for (i in e.target._eventParents) {
+	           //         e.target._eventParents[i].resetStyle(e.target);
+	           //     }
+	            },
+	            //si apoyo mouse sobre objeto:
+	            mouseover: function(e) {
+	           //         if (e.target.feature.geometry.type === 'LineString') {
+	           //             e.target.setStyle({
+	           //             color: '#ffff00',
+	           //           });
+	           //         } else {
+	            	     console.log(e.target.feature.geometry.type);
+	           //           console.log(e.target.feature.geometry.type);
+	           //           e.target.setStyle({
+	           //             fillColor: '#ffff00',
+	           //             fillOpacity: 1,
+	           //                 iconSize:50,
+	           //           });
+	           //         }
+	           },
+	 });
 	
-				$("#sidebar").append(info);
-				plotTimeSerie();
-				addProgressBar(feature.properties['AQI'],feature.properties['NO2'],feature.properties['PM10'],feature.properties['PM25'],feature.properties['SO2'],feature.properties['CO']);
-				
-				$("#sidebar").show();
-
-				$("body,html").animate({scrollTop: $('#sidebar').offset().top},100);
-
-
-
-				 },
-		                 //si saco mouse sobre objeto:
-		                 mouseout: function(e) {
-		                //     for (i in e.target._eventParents) {
-		                //         e.target._eventParents[i].resetStyle(e.target);
-		                //     }
-		                 },
-		                 //si apoyo mouse sobre objeto:
-		                 mouseover: function(e) {
-		                //         if (e.target.feature.geometry.type === 'LineString') {
-		                //             e.target.setStyle({
-		                //             color: '#ffff00',
-		                //           });
-		                //         } else {
-		                 	     console.log(e.target.feature.geometry.type);
-				//           console.log(e.target.feature.geometry.type);
-		                //           e.target.setStyle({
-		                //             fillColor: '#ffff00',
-		                //             fillOpacity: 1,
-		                //                 iconSize:50,
-		                //           });
-		                //         }
-		                },
-		            });
-		
-		//Contenido del popUP:
-		var popupContent = 'Estación: <br><center><strong>'+ (feature.properties['ID'] !== null ? feature.properties['ID'].toLocaleString() : '')+'</strong></center>';
+	//Contenido del popUP:
+	var popupContent = 'Estación: <br><center><strong>'+ (feature.properties['ID'] !== null ? feature.properties['ID'].toLocaleString() : '')+'</strong></center>';
 // <tr><th scope="row">fid   </th><td>'+ (feature.properties['fid']   !== null ? feature.properties['fid'].toLocaleString()   : '')+'</td></tr>\
-		layer.bindPopup(popupContent, {maxHeight: 400,maxWidth:1900});
-		}
+	layer.bindPopup(popupContent, {maxHeight: 400,maxWidth:1900});
+}
 
 //Cargar layer de marker-cluster
 var layer_Puntos = new L.geoJson(json_AQSTAT_1, {
@@ -235,15 +240,15 @@ var layer_Puntos = new L.geoJson(json_AQSTAT_1, {
 var cluster_PUNTOS = new L.MarkerClusterGroup({
 	showCoverageOnHover: false,
 	iconCreateFunction: function(cluster){
-			var childCount = cluster.getChildCount();
-			 var c = ' marker-cluster-';
-			 if (childCount < 3) {          c += 'small'; size=5; } 
-			 else if (childCount < 8) {     c += 'medium';size=40;} 
-			 else {				c += 'large'; size=80;}
-			 return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', 
-			 			className: 'marker-cluster' + c,
-				 		iconSize: new L.Point(40,40) 
-			 });
+		var childCount = cluster.getChildCount();
+		var c = ' marker-cluster-';
+		if (childCount < 3) {          c += 'small'; size=5; } 
+		else if (childCount < 8) {     c += 'medium';size=40;} 
+		else {				c += 'large'; size=80;}
+		return new L.DivIcon({html: '<div><span>' + childCount + '</span></div>', 
+		 	className: 'marker-cluster' + c,
+			iconSize: new L.Point(40,40) 
+		 });
 	},
 	spiderfyDistanceMultiplier: 2
 });
@@ -251,11 +256,10 @@ cluster_PUNTOS.addLayer(layer_Puntos);
 cluster_PUNTOS.addTo(mymap);
 
 
-
-
-//Events:
+//EVENTOS en MAPA:
 function onMapClick(e) {
 	$("#sidebar").hide();
+	$("#proyect-info").hide();
     //popup
     //    .setLatLng(e.latlng)
     //    .setContent("Clickiaste en: " + e.latlng.toString())
@@ -264,6 +268,10 @@ function onMapClick(e) {
 mymap.on('click', onMapClick);
 
 
+
+
+
+//Funciones miscelaneas:
 function makeAQIdiv(AQI){
 	     if (          AQI<=50 ){color="#55a84f";clase="good"}
 	else if (AQI>50  & AQI<=100){color="#a3c853";clase="satisfactory"} 
@@ -275,17 +283,13 @@ function makeAQIdiv(AQI){
 };
 
 function makeMeteoIcons(TEMP,RHUM,WSPD,WDIR){
-	return '<div id="meteorology"><span>&#127777;'+TEMP+'°C</span><span>&#128167;'+RHUM+' %</span><span>&#8605;'+WSPD+'m/s </span><span>&#10037; '+WDIR+'°</span></div>';
+	return '<div id="meteo-bar"><span>&#127777; <br>'+TEMP+'°C</span><span>&#128167;<br>'+RHUM+' %</span><span>&#8605;<br>'+WSPD+'m/s </span><span>&#10037;<br>'+WDIR+'°</span></div>';
 };
 
 
+
+//PROGRESS BAR:
 function makePollutsIndicatorBars(){
-	//out='<div id="pollutsContainerBars">'
-	//out+='<div class="myProgress" unit="ug/m3"><div class="myBar" name="NO2"  value="'+NO2+'"  ></div></div>'
-	//out+='<div class="myProgress" unit="ug/m3"><div class="myBar" name="PM10" value="'+PM10+'" ></div></div>'
-	//out+='<div class="myProgress" unit="ug/m3"><div class="myBar" name="PM25" value="'+PM25+'" ></div></div>'
-	//out+='<div class="myProgress" unit="ug/m3"><div class="myBar" name="SO2"  value="'+SO2+'"  ></div></div>'
-	//out+='<div class="myProgress" unit="ug/m3"><div class="myBar" name="CO"   value="'+CO+'"   ></div></div>'
 	out='<div id="pollutsContainerBars">'
 	out+='<div id="NO2-bar"  class="container-bar">NO<sub>2</sub> </div>'
 	out+='<div id="PM10-bar" class="container-bar">PM<sub>10</sub></div>'
@@ -295,8 +299,6 @@ function makePollutsIndicatorBars(){
 	out+='</div>'
 	return out
 };
-
-
 
 function addProgressBar(AQI,NO2,PM10,PM25,SO2,CO){
 	const NO2min=0.0; const NO2max=300.0;
@@ -375,13 +377,6 @@ function addProgressBar(AQI,NO2,PM10,PM25,SO2,CO){
 	AQIbar.animate(Math.min(AQI/500.0,1)); // percent
 };
 
-
-
-
-
-
-
-
 //PLOTLY:
 function plotTimeSerie(){
 	Plotly.d3.csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv", function(err, rows){
@@ -411,7 +406,7 @@ function plotTimeSerie(){
 	    title: 'Serie Temporal',
 	    autosize: false,
             width: 400,
-	    height: 350,           
+	    height: 360,           
 	    xaxis: {
 	    range: ['2016-07-01', '2016-12-31'],
 	    type: 'date',

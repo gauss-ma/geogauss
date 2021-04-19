@@ -1,12 +1,15 @@
 html,body,main,header,footer{padding:0;margin:0}
 
 header{
+	width:100%;
 	position:absolute;
-	right:24px;
-	top:10px;
-	display:flex;
+	top:0px;
+	right:25px;
 	z-index:100000;
+	display:flex;
 	align-items:center;
+	justify-content:end;
+	opacity:1;
 }
 #logo > img{width:40px;}
 #logo > h1{font-size:26px;color:var(--negro);  font-family: 'Montserrat', "DejaVu Sans", Verdana, 'sans‑serif';}
@@ -21,25 +24,24 @@ main{
 	align-items: left;
 	z-index:0;
 }
+
 #mapid{
 	width:100%;
 	height:100%;
 }
 #sidebar{
+	width:100%;
+ 	max-width:400px;
 		display:flex;
 		flex-direction: column;
 		align-items: center;
 		text-align:center;
   		overflow: scroll;
-  		overflow-x: hidden;
-	width:100%;
- 	max-width:500px;
-	border-radius:5px;
-	margin:0;
 	padding:10px;
+	margin:0px;
 	padding-top:80px;
 		background-color:white;
-		z-index:100000;
+		z-index:10000;
 }
 
 #sidebar>div{
@@ -50,129 +52,17 @@ main{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.leaflet-marker-icon{
-	opacity:0.8!important;
-}
-.leaflet-marker-icon:hover{
-	opacity:1!important;
-}
-
-/*
-.marker-cluster     {background-color:var(--celeste-saturado); opacity:0.6;}
-.marker-cluster div {background-color:var(--celeste-saturado); opacity:0.8;}
-
-.marker-cluster div:hover{opacity:1;}
-
-.marker-cluster-small {}
-.marker-cluster-small div {}
-.marker-cluster-medium {}
-.marker-cluster-medium div {}
-.marker-cluster-large {}
-.marker-cluster-large div {}
-*/
-.marker-low {
-background-color: rgba(218, 94, 94, 0.6);
-}
-.marker-low div {
-background-color: rgba(226, 36, 36, 0.6);
-}
-.marker-medium {
-background-color: rgba(241, 211, 87, 0.6);
-}
-.marker-medium div {
-background-color: rgba(240, 194, 12, 0.6);
-}
-.marker-high {
-background-color: rgba(253, 156, 115, 0.6);
-}
-.marker-highe div {
-background-color: rgba(241, 128, 23, 0.6);
-}
-*/
-
-
-.container {
-  width: 100%;
-  display: flex-inline;
-  align-items: center;
-}
-
-.myProgress {
-	height:6px;
-  	width: 300px;
-  	background-color: var(--gris-claro);
-  	border-radius:5px;
-	margin-bottom:30px;
-}
-.myBar {
-	height:6px;
-  	width: 10%;
-  	background-color: var(--rosa);
-  	border-radius:1px;
-}
-
-.myBar::after,.myBar::before{
-	color:var(--gris-oscuro);
-	text-align:left;
-	font-weight:bold;
-}
-.myBar::after{
-  content: attr(name);
-  position:relative;
-  left:0%;
-  bottom:12px;
-}
-
-.myBar::before {
-  content: attr(value);
-  position:relative;
-  left:100%;
-  bottom:20px;
-}
-
-.myProgress::before {
-  content:' ['attr(unit)']';
-  position:fixed;
-  right:0;
-}
-
-
-
-
-#meteorology{
+#meteo-bar{
 	display:flex;
 	flex-direction:row;
 	justify-content:space-around;
 	align-items: center;
-	margin-right:20%;
-	margin-left:20%;
+	margin-right:5%;
+	margin-left:5%;
 } 
 
-#meteorology>span{
-	padding:5px;
+#meteo-bar>span{
+	padding:10px;
 } 
 
 
@@ -217,12 +107,13 @@ background-color: rgba(241, 128, 23, 0.6);
 	margin-bottom:0px;
 }
 .inner >h2{
-	font-size:3.2em;
+	font-size:3.5em;
 	line-height:1em;
 }
 .inner >h3{
 	font-size:1.15em;
   	text-transform: uppercase;
+	margin-bottom:10px;
 }
 
 
@@ -246,22 +137,58 @@ margin-bottom:25px;
 
 }
 
+/* hoja de info */
+#proyect-info{
+	position: fixed;
+	width: 700px;
+	top: 50%;
+	left: 50%;
+	margin-top: -250px; /* Negative half of height. */
+	margin-left: -400px; /* Negative half of width. */
 
-
-/* Responsive layout - makes a one column layout instead of a two-column layout */
-@media (max-width: 800px) {
-  main {
-    	flex-direction: column;
-  }
-  #sidebar{
-      overflow: hide;
-      padding:1px;
+	z-index:90000;
+	padding:15px;
+	border-radius:10px;
+	background-color:var(--blanco);
+	opacity:0.9;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	vertial-align:center;
+	justify-content:center;
 }
-  #plot-container, .container-bar{
+#proyect-info>.close-mark{
+	position:absolute;top:25px;right:35px;
+color:var(--gris-medio);
+  font-weight: 600;
+font-size:24px;
+  font-family: Arial, sans-serif;
+}
+#proyect-info>.close-mark:hover{
+
+opacity:1;
+color:var(--celeste-claro);
+}
+
+#proyect-info>p>a:hover{
+color:var(--celeste-claro);
+
+}
+#proyect-info>h3{
+	margin:20px;
+	border-bottom:2px solid var(--gris-oscuro);
+}
+#proyect-info>h4{
+	padding:5px;
 }
 
 
-}
+
+
+
+
+
+
 
 
 
@@ -293,3 +220,90 @@ margin-bottom:25px;
 .modebar{
       display: none !important;
 }
+/* modifica diseños de leaflet */
+.leaflet-marker-icon{
+	opacity:0.8!important;
+}
+.leaflet-marker-icon:hover{
+	opacity:1!important;
+}
+
+/*
+.marker-cluster     {background-color:var(--celeste-saturado); opacity:0.6;}
+.marker-cluster div {background-color:var(--celeste-saturado); opacity:0.8;}
+
+.marker-cluster div:hover{opacity:1;}
+
+.marker-cluster-small {}
+.marker-cluster-small div {}
+.marker-cluster-medium {}
+.marker-cluster-medium div {}
+.marker-cluster-large {}
+.marker-cluster-large div {}
+
+.marker-low {
+background-color: rgba(218, 94, 94, 0.6);
+}
+.marker-low div {
+background-color: rgba(226, 36, 36, 0.6);
+}
+.marker-medium {
+background-color: rgba(241, 211, 87, 0.6);
+}
+.marker-medium div {
+background-color: rgba(240, 194, 12, 0.6);
+}
+.marker-high {
+background-color: rgba(253, 156, 115, 0.6);
+}
+.marker-highe div {
+background-color: rgba(241, 128, 23, 0.6);
+}
+*/
+
+
+/* Responsive layout - makes a one column layout instead of a two-column layout */
+@media (max-width: 800px) {
+  main {
+    	flex-direction: column;
+  }
+  #sidebar{
+	  width:100%;
+      overflow: hide;
+      padding:1px;
+}
+  #plot-container, .container-bar{
+  }
+  #proyect-info{
+  	position: fixed;
+  width: 100%;
+  height:100%;
+  top: 0;
+  left: 0;
+  margin-top: 0px; /* Negative half of height. */
+  margin-left:0px; /* Negative half of width. */
+  	z-index:10000;
+  	padding:15px;
+	padding-top:50px;
+  	border-radius:10px;
+  
+ } 
+ #proyect-info >.close-mark{
+	right:50px;
+ }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
